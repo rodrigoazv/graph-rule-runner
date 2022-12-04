@@ -1,0 +1,22 @@
+version: '3.8'
+networks:
+  lan:
+
+services:
+  storage:
+    hostname: storage
+    image: neo4j:latest
+    networks:
+      - lan
+    ports: 
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - neo4j_data:/data/
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "echo RETURN 1 | cypher-shell -a bolt://storage:9001 -u neo4j -p passw0rd || exit 1" ]
+
+volumes:
+    neo4j_data:
